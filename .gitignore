@@ -32,3 +32,6 @@ build/
 
 ### Emacs ###
 *~
+
+### Mac ###
+.DS_Store

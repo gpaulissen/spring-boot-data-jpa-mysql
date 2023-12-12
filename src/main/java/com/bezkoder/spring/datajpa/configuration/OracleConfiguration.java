@@ -45,19 +45,7 @@ public class OracleConfiguration {
     
     @Bean
     OracleDataSource oracleDataSource() throws SQLException {
-        OracleDataSource dataSource = new OracleDataSource();
-
-        Assert.notNull(username, "Username must NOT be null");
-        Assert.notNull(password, "Password must NOT be null");
-        Assert.notNull(url, "URL must NOT be null");
-
-        dataSource.setUser(username);
-        dataSource.setPassword(password);
-        dataSource.setURL(url);
-        dataSource.setImplicitCachingEnabled(true);
-        // dataSource.setFastConnectionFailoverEnabled(true);
-
-        return dataSource;
+        return OracleDataSourceFactory.getOracleDataSource(url, username, password);
     }
     
     @Bean
