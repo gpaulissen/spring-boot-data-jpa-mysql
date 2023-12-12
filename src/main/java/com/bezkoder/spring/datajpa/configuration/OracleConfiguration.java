@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
+import lombok.Setter;
+
 import oracle.jdbc.pool.OracleDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.util.Assert;
     
 @Configuration
 @ConfigurationProperties("oracle")
+@Setter
 public class OracleConfiguration {
     @Autowired
     private ConnectionUsernameProvider contextProvider;
@@ -30,18 +33,6 @@ public class OracleConfiguration {
 
     @NotNull
     private String url;
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    public void setUrl(String url) {
-        this.url = url;
-    }
     
     @Bean
     OracleDataSource oracleDataSource() throws SQLException {
