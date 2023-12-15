@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 @Configuration
 public class OracleConfiguration {
     
-    public static final Logger logger = LoggerFactory.getLogger(OracleConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(OracleConfiguration.class);
 
     static {
         logger.info("Initializing {}", OracleConfiguration.class.toString());
@@ -38,9 +38,6 @@ public class OracleConfiguration {
 
     private @Value("${spring.datasource.schema}") String schema;
 
-    @Autowired
-    private ConnectionUsernameProvider contextProvider;
-    
     @Bean(name = {"dataSourceProperties"})
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSourceProperties getDataSourceProperties() {
@@ -51,16 +48,12 @@ public class OracleConfiguration {
     @Bean(name = {"dataSource"})
     @ConfigurationProperties(prefix = "spring.datasource.oracleucp")
     public DataSource getDataSource(@Qualifier("dataSourceProperties") DataSourceProperties properties) throws java.sql.SQLException {
-        logger.info("data source properties: " + properties.toString());
-        
-        DataSource dataSource = properties
+        final DataSource dataSource = properties
             .initializeDataSourceBuilder()
             .type(PoolDataSourceImpl.class)
             .build();
         
         Assert.isInstanceOf(PoolDataSource.class, dataSource, "data source should be of type " + PoolDataSource.class.toString());
-
-        Assert.notNull(contextProvider, "Context provider must NOT be null");
 
         ((PoolDataSource)dataSource).registerConnectionInitializationCallback(new ConnectionInitializationCallback() {
                 @Override
