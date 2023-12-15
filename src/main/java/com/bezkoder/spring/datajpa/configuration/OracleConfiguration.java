@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
+import oracle.jdbc.OracleConnection;
 import oracle.jdbc.pool.OracleDataSource;
+import oracle.ucp.jdbc.ConnectionInitializationCallback;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceImpl;
-import oracle.ucp.jdbc.ConnectionInitializationCallback;
-import oracle.jdbc.OracleConnection;
     
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,8 +18,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jdbc.support.ConnectionUsernameProvider;
-import org.springframework.data.jdbc.support.oracle.ProxyDataSource;
 import org.springframework.util.Assert;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +48,7 @@ public class OracleConfiguration {
     public DataSource getDataSource(@Qualifier("dataSourceProperties") DataSourceProperties properties) throws java.sql.SQLException {
         final DataSource dataSource = properties
             .initializeDataSourceBuilder()
-            .type(PoolDataSourceImpl.class)
+            //.type(PoolDataSourceImpl.class) // spring.datasource.type=oracle.ucp.jdbc.PoolDataSourceImpl
             .build();
         
         Assert.isInstanceOf(PoolDataSource.class, dataSource, "data source should be of type " + PoolDataSource.class.toString());
